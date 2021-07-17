@@ -8,5 +8,8 @@
 </script>
 
 <style>
-
+html {
+    color: white;
+    background-color: black;
+}
 </style>
