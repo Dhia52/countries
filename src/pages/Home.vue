@@ -1,22 +1,37 @@
 <template>
-    <Card :cardTitle="cardTitle" :image="image" />
+    <Card v-for="(country, index) in countries"
+        :key="index"
+        :cardTitle="country.name"
+        :image="{alt: `Flag of ${country.name}`, img: country.flag}"
+    />
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { ref, onMounted, defineComponent } from "vue"
 
 import Card from "../components/Card.vue"
 
-import Africa from "../assets/images/continents/africa.svg"
+import * as CountriesService from "../services/CountriesService.js"
+
+import Country from '../types/Country'
 
 export default defineComponent ({
     name: "Home",
-
+    components: { Card },
     setup() {
-        const cardTitle = "Africa"
-        const image = { alt: "African Continent", img: Africa }
+        const countries = ref<Country[]>([{name: '', capital: '', flag: ''}])
 
-        return { cardTitle, image }
+        const getAllCountries = async () => {
+            try {
+                countries.value = await CountriesService.getAllCountries()
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+        onMounted(getAllCountries)
+
+        return { countries, getAllCountries }
     }
 })
 </script>
