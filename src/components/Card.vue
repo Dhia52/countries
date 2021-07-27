@@ -20,9 +20,12 @@ export default defineComponent({
 <style lang="scss" scoped>
 .card {
     max-width: 250px;
+    background-color: grey;
+    margin: 10px 0;
     border-color: grey;
     border-width: 2px;
     border-style: solid;
+    border-radius: 10px;
     text-align: center;
     img {
         width: 100%;

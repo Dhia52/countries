@@ -1,29 +1,33 @@
 <template>
-    <Card v-for="(country, index) in countries"
+    <CountriesGroup v-for="([key, countries], index) in countries"
         :key="index"
-        :cardTitle="country.name"
-        :image="{alt: `Flag of ${country.name}`, img: country.flag}"
+        :groupName="key"
+        :countries="countries"
     />
 </template>
 
 <script lang="ts">
 import { ref, onMounted, defineComponent } from "vue"
 
-import Card from "../components/Card.vue"
+import CountriesGroup from "../components/CountriesGroup.vue"
 
-import * as CountriesService from "../services/CountriesService.js"
+import * as CountriesService from "../services/CountriesService"
+
+import sortCountries from '../functions/SortCountries'
 
 import Country from '../types/Country'
 
 export default defineComponent ({
     name: "Home",
-    components: { Card },
+    components: { CountriesGroup },
     setup() {
-        const countries = ref<Country[]>([{name: '', capital: '', flag: ''}])
+        const countries = ref()
 
         const getAllCountries = async () => {
             try {
-                countries.value = await CountriesService.getAllCountries()
+                let allCountries: Country[] = await CountriesService.getAllCountries()
+                const sortedCountries = sortCountries(allCountries)
+                countries.value = sortedCountries
             } catch (error) {
                 console.log(error)
             }
