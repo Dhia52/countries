@@ -19,9 +19,9 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .card {
-    max-width: 250px;
+    width: 250px;
     background-color: grey;
-    margin: 10px 0;
+    margin: 10px 10px;
     border-color: grey;
     border-width: 2px;
     border-style: solid;
