@@ -8,7 +8,12 @@ const instance = axios.create({
 })
 
 export async function getAllCountries(): Promise<Country[]> {
-    const response = await instance.get('all')
+    const response = await instance.get('all?fields=name;flag')
+    return response.data
+}
+
+export async function getContinentCountries(region: String) {
+    const response = await instance.get(`region/${region}`)
     return response.data
 }
 

@@ -10,13 +10,14 @@
                 :key="index"
                 :cardTitle="item.name"
                 :image="{alt: `Flag of ${item.name}`, img: item.flag}"
+                :linkType="linkType"
             />
         </div>
     </div>
 </template>
 
 <script>
-import { ref, defineComponent } from "vue"
+import { ref, defineComponent, computed } from "vue"
 
 import Card from "./Card.vue"
 
@@ -27,14 +28,21 @@ export default defineComponent ({
         groupName: {type: String, required: true},
         group: {type: Array, required: true}
     },
-    setup () {
+    setup (props) {
         let display = ref(false)
+
+        const linkType = computed(() => {
+            if (props.groupName === 'Continents') {
+                return 'region'
+            }
+            return 'country'
+        })
 
         const toggleDisplay = () => {
             display.value = !display.value
         }
 
-        return { display, toggleDisplay }
+        return { display, toggleDisplay, linkType }
     }
 })
 </script>
@@ -54,6 +62,9 @@ export default defineComponent ({
         justify-content: space-between;
         > * {
             display: block;
+        }
+        > button {
+            cursor: pointer;
         }
     }
 }

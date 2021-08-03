@@ -7,7 +7,7 @@ import Country from '../types/Country'
  * @returns a Map object of countries
  */
 
-export default function sortCountries (countries: Country[]) {
+export function sortCountries (countries: Country[]) {
     //Sorts countries alphabetically depending on name property
     countries.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
     
