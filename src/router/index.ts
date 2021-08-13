@@ -14,13 +14,13 @@ const router = VueRouter.createRouter({
             component: Home
         },
         {
-            path: '/country/:country',
+            path: '/country/:countryCode',
             name: 'Country',
             component: Country,
             props: true
         },
         {
-            path: '/region/:region',
+            path: '/region/:regionCode',
             name: 'Region',
             component: Region,
             props: true

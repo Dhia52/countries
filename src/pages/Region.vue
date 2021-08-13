@@ -1,5 +1,5 @@
 <template>
-    <h1>{{ pageTitle }}</h1>
+    <h1>{{ region.name }}</h1>
     <CardsGroup v-for="([key, countries], index) in countries"
         :groupName="key"
         :group="countries"
@@ -20,24 +20,24 @@ import { getContinentCountries } from '../services/CountriesService'
 
 import { sortCountries } from '../functions/SortCountries'
 
+import { Continent } from '../types/Continent'
+
 export default defineComponent({
     name: "Region",
     components: { CardsGroup },
     props: {
-        region: { type: String, required: true}
+        regionCode: { type: String, required: true}
     },
     setup (props) {
         const router = useRouter()
         const route = useRoute()
+        
+        const region = ref<Continent>({name: '', img: '', code: ''})
 
         //Navigation guard
-        let validRegions: String[] = []
-        continentsArray.forEach( continent => {
-            validRegions.push(continent.name.toLowerCase())
-        })
-
+        const continentIndex = continentsArray.findIndex(continent => continent.code === props.regionCode)
         //Redirect to "Page not found" if region is invalid
-        if ( validRegions.indexOf(props.region) === -1 ) {
+        if ( continentIndex === -1 ) {
             router.replace({
                 name: 'NotFound',
                 params: { path: route.path.substring(1).split('/') }
@@ -45,23 +45,21 @@ export default defineComponent({
         }
         // Navigation guard end
 
+        region.value = continentsArray[continentIndex]
         const countries = ref()
-        //Capitalize continent name
-        const pageTitle = computed(() => props.region[0].toUpperCase() + props.region.slice(1))
-
+        
         const getRegionCountries = async () => {
             try {
-                let allCountries = await getContinentCountries(props.region)
-                const sortedCountries = sortCountries(allCountries)
-                countries.value = sortedCountries
+                let allCountries = await getContinentCountries(region.value.name)
+                countries.value = sortCountries(allCountries)
             } catch (error) {
                 console.log(error)
             }
         }
+        
+        getRegionCountries()
 
-        onMounted(getRegionCountries)
-
-        return { countries, pageTitle, getRegionCountries }
+        return { region, countries, getRegionCountries }
     }
 })
 </script>

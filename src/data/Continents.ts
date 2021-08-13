@@ -1,7 +1,9 @@
-export const continentsArray = [
-    { name: 'Africa', flag: '/src/assets/images/continents/africa.svg' },
-    { name: 'Americas', flag: '/src/assets/images/continents/americas.svg' },
-    { name: 'Asia', flag: '/src/assets/images/continents/asia.svg' },
-    { name: 'Europe', flag: '/src/assets/images/continents/europe.svg' },
-    { name: 'Oceania', flag: '/src/assets/images/continents/oceania.svg' }
+import { Continent } from '../types/Continent'
+
+export const continentsArray: Continent[] = [
+    { name: 'Africa', img: '/src/assets/images/continents/africa.svg', code: 'AF' },
+    { name: 'Americas', img: '/src/assets/images/continents/americas.svg', code: 'NASA' },
+    { name: 'Asia', img: '/src/assets/images/continents/asia.svg', code: 'AS' },
+    { name: 'Europe', img: '/src/assets/images/continents/europe.svg', code: 'EU' },
+    { name: 'Oceania', img: '/src/assets/images/continents/oceania.svg', code: 'OC' }
 ]

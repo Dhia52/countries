@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted, defineComponent } from "vue"
+import { ref, defineComponent } from "vue"
 
 import CardsGroup from "../components/CardsGroup.vue"
 
@@ -16,7 +16,7 @@ import { getAllCountries } from "../services/CountriesService"
 
 import { sortCountries } from '../functions/SortCountries'
 
-import Country from '../types/Country'
+import { CountryCard } from '../types/CountryCard'
 
 import { continentsArray } from '../data/Continents'
 
@@ -29,15 +29,14 @@ export default defineComponent ({
 
         const getCountries = async () => {
             try {
-                let allCountries: Country[] = await getAllCountries()
-                const sortedCountries = sortCountries(allCountries)
-                countries.value = sortedCountries
+                let allCountries: CountryCard[] = await getAllCountries()                
+                countries.value = sortCountries(allCountries)
             } catch (error) {
                 console.log(error)
             }
         }
 
-        onMounted(getCountries)
+        getCountries()
 
         return { countries, continents, getCountries }
     }

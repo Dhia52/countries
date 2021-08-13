@@ -13,7 +13,7 @@
 
 <style>
 html {
-    color: white;
-    background-color: black;
+  color: white;
+  background-color: black;
 }
 </style>

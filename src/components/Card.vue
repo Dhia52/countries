@@ -1,26 +1,39 @@
 <template>
     <router-link :to="cardLink">
         <div class="card">
-            <h3>{{ cardTitle }}</h3>
-            <img :alt="image.alt" :src="image.img" />
+            <h3>{{ content.name }}</h3>
+            <img :alt="image.alt" :src="image.src" />
         </div>
     </router-link>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue"
+import { defineComponent, computed, PropType } from "vue"
+
+import { Country } from '../types/Country'
+import { Continent } from '../types/Continent'
 
 export default defineComponent({
     name: "Card",
     props: {
-        cardTitle: { type: String, required: true },
-        image: { type: Object, required: true },
-        linkType: { type: String, required: true}
+        content: { type: Object as PropType<Country | Continent> , required: true }
     },
     setup(props) {
-        const cardLink = computed(() => `/${props.linkType}/${props.cardTitle.toLowerCase()}`)
+        const cardLink = computed(() => {
+            if ( "code" in props.content ) {
+                return `/region/${props.content.code}`
+            }
+            return `/country/${props.content.alpha3Code}`
+        })
 
-        return { cardLink }
+        const image = computed(() => {
+            if ( "flag" in props.content ) {
+                return { alt: `Flag of ${props.content.name}`, src: props.content.flag }
+            }
+            return { alt: props.content.name, src: props.content.img }
+        })
+
+        return { cardLink, image }
     }
 })
 </script>

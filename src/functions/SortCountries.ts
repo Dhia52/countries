@@ -1,4 +1,4 @@
-import Country from '../types/Country'
+import { CountryCard } from '../types/CountryCard'
 
 /**
  * Sorts countries based on the initial letter
@@ -7,7 +7,7 @@ import Country from '../types/Country'
  * @returns a Map object of countries
  */
 
-export function sortCountries (countries: Country[]) {
+export function sortCountries (countries: CountryCard[]) {
     //Sorts countries alphabetically depending on name property
     countries.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
     

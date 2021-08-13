@@ -1,23 +1,38 @@
 import axios from 'axios'
 
-import Country from '../types/Country'
+import { Country } from '../types/Country'
+import { CountryCard } from '../types/CountryCard'
 
 const instance = axios.create({
     baseURL: "https://restcountries.eu/rest/v2/",
     timeout: 30000
 })
 
-export async function getAllCountries(): Promise<Country[]> {
-    const response = await instance.get('all?fields=name;flag')
+/**
+ * Fetches all countries of the world
+ * @returns an array of objects representing countries
+ */
+export async function getAllCountries(): Promise<CountryCard[]> {
+    const response = await instance.get('all?fields=name;flag;alpha3Code')
     return response.data
 }
 
-export async function getContinentCountries(region: String) {
-    const response = await instance.get(`region/${region}`)
+/**
+ * Fetches all countries of a selected region
+ * @param region a string representing a selected region of the world
+ * @returns an array of objects representing countries
+ */
+export async function getContinentCountries(region: String): Promise<CountryCard[]> {
+    const response = await instance.get(`region/${region}?fields=name;flag;alpha3Code`)
     return response.data
 }
 
-export async function getCountry(country: string): Promise<Country> {
-    const response = await instance.get(`name/${country}`)
+/**
+ * Fetches a single country's infos
+ * @param countryCode a string representing the ISO 3166-1 alpha-3 country code
+ * @returns a country object
+ */
+export async function getCountry(countryCode: string): Promise<Country> {
+    const response = await instance.get(`alpha/${countryCode}`)
     return response.data
 }

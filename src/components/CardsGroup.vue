@@ -8,9 +8,7 @@
         <div class="cards" v-show="display">
             <Card v-for="(item, index) in group"
                 :key="index"
-                :cardTitle="item.name"
-                :image="{alt: `Flag of ${item.name}`, img: item.flag}"
-                :linkType="linkType"
+                :content="item"
             />
         </div>
     </div>
@@ -28,21 +26,14 @@ export default defineComponent ({
         groupName: {type: String, required: true},
         group: {type: Array, required: true}
     },
-    setup (props) {
+    setup () {
         let display = ref(false)
-
-        const linkType = computed(() => {
-            if (props.groupName === 'Continents') {
-                return 'region'
-            }
-            return 'country'
-        })
 
         const toggleDisplay = () => {
             display.value = !display.value
         }
 
-        return { display, toggleDisplay, linkType }
+        return { display, toggleDisplay }
     }
 })
 </script>
