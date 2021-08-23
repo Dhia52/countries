@@ -1,8 +1,6 @@
 <template>
-    <router-link :to="link">
-        <div class="neighbour-country">
-                {{ countryName }}
-        </div>
+    <router-link :to="link" class="country-neighbour">
+        {{ countryName }}
     </router-link>
 </template>
 
@@ -37,5 +35,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
+.country-neighbour {
+    color: yellow;
+}
 </style>

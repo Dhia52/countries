@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { ref, defineComponent, computed } from "vue"
+import { ref, defineComponent } from "vue"
 
 import Card from "./Card.vue"
 

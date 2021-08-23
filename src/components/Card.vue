@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="cardLink">
+    <router-link :to="cardLink" class="link-card">
         <div class="card">
             <h3>{{ content.name }}</h3>
             <img :alt="image.alt" :src="image.src" />
@@ -39,23 +39,24 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.card {
-    width: 250px;
-    background-color: grey;
-    margin: 5px 5px;
-    padding: 0px 5px 5px 5px;
-    border-color: grey;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 10px;
-    text-align: center;
-    > h3 {
-        color: unset;
-        text-decoration: unset;
-    }
-    > img {
-        width: 100%;
-    }
+.link-card {
+    color: white;
+    text-decoration: none;
 
+    >.card {
+        width: 250px;
+        background-color: grey;
+        margin: 5px 5px;
+        padding: 0px 5px 5px 5px;
+        border-color: grey;
+        border-width: 2px;
+        border-style: solid;
+        border-radius: 10px;
+        text-align: center;
+        
+        > img {
+            width: 100%;
+        }
+    }
 }
 </style>

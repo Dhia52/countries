@@ -1,97 +1,127 @@
 <template>
-    <div class="country-info" v-if="countryInfo">
-        <div class="country-names">
-            <h1>{{ countryInfo.name }} <span v-if="showNativeName">- {{ countryInfo.nativeName }}</span></h1>
-            <h4 v-if="countryInfo.altSpellings">{{ countryInfo.altSpellings.join(', ') }}</h4>
-        </div>
-        <div class="country-flag">
-            <h2>{{ flagAlt }}</h2>
-            <img :alt="flagAlt" :src="countryInfo.flag" />
-        </div>
-        <h2 v-if="countryInfo.demonym">Demonym: {{ countryInfo.demonym }}</h2>
-        <div class="country-region">
-            <h2>Region:</h2>
-            <div><router-link :to="regionLink">{{ countryInfo.region }}</router-link><br>{{ countryInfo.subregion }}</div>
-        </div>
-        <div class="country-position">
-            <h2>Position:</h2>
-            <div>Latitude: {{ countryInfo.latlng[0] }}<br>Longitude: {{ countryInfo.latlng[1] }}</div>
-        </div>
-        <h2 v-if="countryInfo.area">Area: {{ countryInfo.area }} km²</h2>
-        <h2>Population: {{ countryInfo.population }}</h2>
-        <h2 v-if="countryInfo.capital">Capital city: {{ countryInfo.capital }}</h2>
-        <div class="country-currencies">
-            <h2>Currency:</h2>
-            <div v-for="(currency, index) in countryInfo.currencies" :key="index">
-                {{ currency.code }} - {{ currency.name }} ({{ currency.symbol }})
-            </div>
-        </div>
-        <div class="neighbours" v-if="hasNeighbours">
-            <h2>Neighbouring countries:</h2>
-            <CountryLink v-for="(countryCode, index) in countryInfo.borders" 
-                :key="index"
-                :countryCode="countryCode"
-            />
-        </div>
-        <div class="languages">
-            <h2>Languages:</h2>
-            <div v-for="(language, index) in countryInfo.languages" :key="index">
-                {{ language.name }}
-            </div>
-        </div>
-        <div v-if="countryInfo.regionalBlocs.length > 0" class="blocs">
-            <h2>This country is a member of the:</h2>
-            <div v-for="(bloc, index) in countryInfo.regionalBlocs" :key="index">
-                {{ bloc.name }} - {{ bloc.acronym }}
-            </div>
-        </div>
-        <div class="translations">
-            <h2>Country name in other languages:</h2>
-        <div v-for="(value, name, index) in countryInfo.translations" :key="index">
-            {{ name }}: {{ value }}
-        </div>
-        </div>
-    </div>
+    <el-container v-if="countryInfo">
+        <el-header>
+            <el-row align="middle" justify="center">
+                <el-col :xs="24" :sm="12">
+                    <h1>{{ countryInfo.name }} <span v-if="showNativeName">- {{ countryInfo.nativeName }}</span></h1>
+                    <h4 v-if="countryInfo.altSpellings">{{ countryInfo.altSpellings.join(', ') }}</h4>
+                </el-col>
+                <el-col :xs="24" :sm="{span: 10, offset: 2}">
+                    <el-card :body-style="{ backgroundColor: '#1a1a1a' }">
+                        <el-image :alt="flagAlt" :src="countryInfo.flag" fit="contain">text</el-image>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-header>
+        <el-main>
+            <el-row justify="space-between">
+                <CountryProperty name="Capital city" v-if="countryInfo.capital">{{ countryInfo.capital }}</CountryProperty>
+                <CountryProperty name="Demonym" v-if="countryInfo.demonym">{{ countryInfo.demonym }}</CountryProperty>
+                <CountryProperty name="Languages">{{ spokenLanguages.join(', ') }}</CountryProperty>
+                <CountryProperty name="Region">
+                    <el-row>
+                        <el-col :sm="12"><router-link :to="regionLink" class="region-link">{{ countryInfo.region }}</router-link></el-col>
+                        <el-col :sm="12">{{ countryInfo.subregion }}</el-col>
+                    </el-row>
+                </CountryProperty>
+                <CountryProperty name="Position">
+                    <el-row align="middle">
+                        <el-col :xs="24" :sm="12">Latitude: {{ countryInfo.latlng[0] }}</el-col>
+                        <el-col :xs="24" :sm="12">Longitude: {{ countryInfo.latlng[1] }}</el-col>
+                    </el-row>
+                </CountryProperty>
+                <CountryProperty v-if="countryInfo.area" name="Area">{{ countryInfo.area }} km²</CountryProperty>
+                <CountryProperty name="Population">{{ countryInfo.population }}</CountryProperty>
+                <CountryProperty name="Currency">
+                    <el-row>
+                        <el-col v-for="(currency, index) in countryInfo.currencies" :key="index">
+                            {{ currency.code }} - {{ currency.name }} <span v-if="currency.symbol">({{ currency.symbol }})</span>
+                        </el-col>
+                    </el-row>
+                </CountryProperty>
+                <CountryProperty name="Country name in other languages">
+                    <el-row>
+                        <el-col v-for="(value, name, index) in countryInfo.translations" :key="index">
+                            {{ name }}: {{ value }}
+                        </el-col>
+                    </el-row>
+                </CountryProperty>
+                <CountryProperty name="This country is a member of the" v-if="countryInfo.regionalBlocs.length > 0">
+                <el-row>
+                    <el-col v-for="(bloc, index) in countryInfo.regionalBlocs" :key="index">
+                        {{ bloc.name }} - {{ bloc.acronym }}
+                    </el-col>
+                </el-row>
+                </CountryProperty>
+                <CountryProperty name="Neighbouring Countries" v-if="hasNeighbours">
+                    <el-row>
+                        <el-col v-for="countryCode in countryInfo.borders" :key="countryCode">
+                            <CountryLink :countryCode="countryCode" />
+                        </el-col>
+                    </el-row>
+                </CountryProperty>
+            </el-row>
+        </el-main>
+    </el-container>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
+
+import { useRouter, useRoute } from 'vue-router'
 
 import CountryLink from '../components/CountryLink.vue'
+import CountryProperty from '../components/CountryProperty.vue'
 
 import { continentsArray } from '../data/Continents'
 
 import { getCountry } from '../services/CountriesService'
 
 import { Country } from '../types/Country'
+import { CountryCard } from '../types/CountryCard'
 
 export default defineComponent({
     name: "Country",
-    components: { CountryLink },
+    components: { CountryLink, CountryProperty },
     props: {
         countryCode: { type: String, required: true }
     },
     setup(props) {
+        const router = useRouter()
+        const route = useRoute()
+
         const countryInfo = ref<Country>()
 
-        const getCountryInfo = async () => {
+        const getCountryInfo = async (isoCode: string) => {
             try {
-                let info = await getCountry(props.countryCode.toLowerCase())
+                let info = await getCountry(isoCode)
                 countryInfo.value = info
             } catch (error) {
                 console.log(error)
+                //Navigation guard
+                router.replace({
+                    name: 'NotFound',
+                    params: { path: route.path.substring(1).split('/') }
+                })
             }
         }
 
-        const getNeighboursInfo = async () => {
-            try {
-                
-            } catch (error) {
-                console.log(error)
+        const getNeighboursInfo = () => {
+            const neighbours: CountryCard[] = []
+            if(countryInfo.value?.borders) {
+                countryInfo.value.borders.forEach(async (isoCode) => {
+                    try {
+                        let country = await getCountry(isoCode.toString())
+                        neighbours.push({name: country.name, flag: country.flag, alpha3Code: country.alpha3Code})
+                    } catch(error) {
+                        console.log("Neighbour not found");
+                    }
+                });
             }
+            return neighbours
         }
 
-        getCountryInfo()
+        getCountryInfo(props.countryCode.toLowerCase())
 
         const showNativeName = computed(() => {
             if(countryInfo.value && "name" in countryInfo.value && "nativeName" in countryInfo.value) {
@@ -115,7 +145,6 @@ export default defineComponent({
                 if (continent) {
                     return `/region/${continent.code}`
                 }
-
                 return '/'
             }
         })
@@ -129,29 +158,50 @@ export default defineComponent({
             return false
         })
 
-        return { countryInfo, getCountryInfo, showNativeName, flagAlt, regionLink, hasNeighbours }
+        const neighbours = computed(() => getNeighboursInfo())
+            
+        const spokenLanguages = computed(() => {
+            let languages: String[] = []
+            if(countryInfo.value && "languages" in countryInfo.value) {
+                countryInfo.value.languages.forEach(language => languages.push(language.name))
+            }
+            return languages
+        })
+
+        //Watcher for refreshing country info after clicking a link
+        watch(
+            () => route.params.countryCode,
+            (toIsoCode) => { 
+                if (typeof toIsoCode === "string") {
+                    getCountryInfo(toIsoCode)
+                    console.log(countryInfo.value?.borders)
+                }
+            }
+        )
+
+        return {
+            countryInfo,
+            getCountryInfo,
+            getNeighboursInfo,
+            neighbours,
+            showNativeName,
+            flagAlt,
+            regionLink,
+            hasNeighbours,
+            spokenLanguages
+        }
     }
     
 })
 </script>
 
 <style lang="scss" scoped>
-.country-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    > .country-flag {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 250px;
-        padding: 5px;
-        margin: 5px;
-        > img {
-            width: 100%;
-            border: gray 5px solid;
-        }
-    }
+.el-header {
+    height: auto;
+    text-align: center;
+}
+
+.region-link {
+    color: yellow;
 }
 </style>
