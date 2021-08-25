@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, onMounted } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 import { useRouter, useRoute } from 'vue-router'
 
@@ -33,6 +33,16 @@ export default defineComponent({
         const route = useRoute()
         
         const region = ref<Continent>({name: '', img: '', code: ''})
+        const countries = ref()
+
+        const getRegionCountries = async () => {
+            try {
+                let allCountries = await getContinentCountries(region.value.name)
+                countries.value = sortCountries(allCountries)
+            } catch (error) {
+                console.log(error)
+            }
+        }
 
         //Navigation guard
         const continentIndex = continentsArray.findIndex(continent => continent.code === props.regionCode)
@@ -42,22 +52,11 @@ export default defineComponent({
                 name: 'NotFound',
                 params: { path: route.path.substring(1).split('/') }
             })
+            // Navigation guard end
+        } else{
+            region.value = continentsArray[continentIndex]
+            getRegionCountries()
         }
-        // Navigation guard end
-
-        region.value = continentsArray[continentIndex]
-        const countries = ref()
-        
-        const getRegionCountries = async () => {
-            try {
-                let allCountries = await getContinentCountries(region.value.name)
-                countries.value = sortCountries(allCountries)
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        
-        getRegionCountries()
 
         return { region, countries, getRegionCountries }
     }
