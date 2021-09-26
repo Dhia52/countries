@@ -11,26 +11,37 @@ const router = VueRouter.createRouter({
         {
             path: '/',
             name: 'Home',
-            component: Home
+            component: Home,
+            meta: { title: "Home" }
         },
         {
             path: '/country/:countryCode',
             name: 'Country',
             component: Country,
-            props: true
+            props: true,
+            meta: { title: "Country" }
         },
         {
             path: '/region/:regionCode',
             name: 'Region',
             component: Region,
-            props: true
+            props: true,
+            meta: { title: "Continent" }
         },
         {
             path: '/:path(.*)*',
             name: 'NotFound',
-            component: NotFound
+            component: NotFound,
+            meta: { title: "Not Found" }
         }
     ]
+})
+
+router.afterEach((to, from) => {
+    console.log(to)
+    if (to.meta.title) {
+        document.title = `${to.meta.title} - ${import.meta.env.VITE_APP_TITLE}`
+    }
 })
 
 export default router

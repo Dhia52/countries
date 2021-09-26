@@ -1,5 +1,7 @@
 export interface CountryCard {
-    name: String,
-    flag: String,
-    alpha3Code: String
+    name: {
+        common: string
+    },
+    flags: string[],
+    cca3: string
 }

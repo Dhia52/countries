@@ -1,30 +1,26 @@
 <template>
     <div class="cards-group">
-        <h2>
-            <span>{{ groupName }}</span>
-            <button type="button" class="button--green" v-if="!display" @click="toggleDisplay">Show</button>
-            <button type="button" class="button--red" v-else @click="toggleDisplay">Hide</button>
-        </h2>
-        <div class="cards" v-show="display">
-            <Card v-for="(item, index) in group"
+        <div class="cards">
+            <Card v-for="(countryCard, index) in countriesCards"
                 :key="index"
-                :content="item"
+                :country="countryCard"
             />
         </div>
     </div>
 </template>
 
-<script>
-import { ref, defineComponent } from "vue"
+<script lang="ts">
+import { ref, defineComponent, PropType } from "vue"
 
 import Card from "./Card.vue"
+
+import { CountryCard } from '../types/CountryCard'
 
 export default defineComponent ({
     name: "CardsGroup",
     components: { Card },
     props: {
-        groupName: {type: String, required: true},
-        group: {type: Array, required: true}
+        countriesCards: { type: Array as PropType<CountryCard[]>, required: true }
     },
     setup () {
         let display = ref(false)
@@ -47,16 +43,6 @@ export default defineComponent ({
         justify-content: space-around;
         align-items: flex-start;
         flex-wrap: wrap;
-    }
-    > h2 {
-        display: flex;
-        justify-content: space-between;
-        > * {
-            display: block;
-        }
-        > button {
-            cursor: pointer;
-        }
     }
 }
 </style>

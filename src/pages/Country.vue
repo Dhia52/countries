@@ -69,6 +69,7 @@
 import { defineComponent, ref, computed, watch } from 'vue'
 
 import { useRouter, useRoute } from 'vue-router'
+import { useStore } from '../store/index'
 
 import CountryLink from '../components/CountryLink.vue'
 import CountryProperty from '../components/CountryProperty.vue'
@@ -89,13 +90,16 @@ export default defineComponent({
     setup(props) {
         const router = useRouter()
         const route = useRoute()
+        const store = useStore()
 
         const countryInfo = ref<Country>()
 
         const getCountryInfo = async (isoCode: string) => {
+            store.commit('TOGGLE_IS_LOADING')
             try {
                 let info = await getCountry(isoCode)
                 countryInfo.value = info
+                document.title= `${info.name.toString()} - ${import.meta.env.VITE_APP_TITLE}`
             } catch (error) {
                 console.log(error)
                 //Navigation guard
@@ -103,6 +107,8 @@ export default defineComponent({
                     name: 'NotFound',
                     params: { path: route.path.substring(1).split('/') }
                 })
+            } finally {
+                store.commit('TOGGLE_IS_LOADING')
             }
         }
 
@@ -171,12 +177,7 @@ export default defineComponent({
         //Watcher for refreshing country info after clicking a link
         watch(
             () => route.params.countryCode,
-            (toIsoCode) => { 
-                if (typeof toIsoCode === "string") {
-                    getCountryInfo(toIsoCode)
-                    console.log(countryInfo.value?.borders)
-                }
-            }
+            (toIsoCode) => { if (typeof toIsoCode === "string") getCountryInfo(toIsoCode) }
         )
 
         return {

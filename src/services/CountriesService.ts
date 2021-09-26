@@ -4,7 +4,7 @@ import { Country } from '../types/Country'
 import { CountryCard } from '../types/CountryCard'
 
 const instance = axios.create({
-    baseURL: "https://restcountries.eu/rest/v2/",
+    baseURL: "https://restcountries.com/v3/",
     timeout: 30000
 })
 
@@ -13,7 +13,7 @@ const instance = axios.create({
  * @returns an array of objects representing countries
  */
 export async function getAllCountries(): Promise<CountryCard[]> {
-    const response = await instance.get('all?fields=name;flag;alpha3Code')
+    const response = await instance.get('all?fields=name,flags,cca3')
     return response.data
 }
 

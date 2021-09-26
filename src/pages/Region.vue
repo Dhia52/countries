@@ -11,6 +11,7 @@
 import { defineComponent, ref } from 'vue'
 
 import { useRouter, useRoute } from 'vue-router'
+import { useStore } from '../store/index'
 
 import CardsGroup from '../components/CardsGroup.vue'
 
@@ -31,16 +32,20 @@ export default defineComponent({
     setup (props) {
         const router = useRouter()
         const route = useRoute()
+        const store = useStore()
         
         const region = ref<Continent>({name: '', img: '', code: ''})
         const countries = ref()
 
         const getRegionCountries = async () => {
+            store.commit('TOGGLE_IS_LOADING')
             try {
                 let allCountries = await getContinentCountries(region.value.name)
                 countries.value = sortCountries(allCountries)
             } catch (error) {
                 console.log(error)
+            } finally {
+                store.commit('TOGGLE_IS_LOADING')
             }
         }
 

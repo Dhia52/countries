@@ -1,16 +1,14 @@
 <template>
-    <CardsGroup groupName="Continents" :group="continents" />
-    <CardsGroup v-for="([key, countries], index) in countries"
-        :groupName="key"
-        :group="countries"
-        :key="index"
-    />
+    <RandomCountries v-if="allCountries" :countries="allCountries" />
+    <!-- <CountriesList :countries="countries" /> -->
 </template>
 
 <script lang="ts">
 import { ref, defineComponent } from "vue"
 
 import CardsGroup from "../components/CardsGroup.vue"
+import RandomCountries from "../components/RandomCountries.vue"
+import CountriesList from "../components/CountriesList.vue"
 
 import { getAllCountries } from "../services/CountriesService"
 
@@ -22,23 +20,22 @@ import { continentsArray } from '../data/Continents'
 
 export default defineComponent ({
     name: "Home",
-    components: { CardsGroup },
+    components: { CardsGroup, RandomCountries, CountriesList },
     setup() {
         const continents = ref(continentsArray)
-        const countries = ref()
+        const allCountries = ref<null | CountryCard[]>(null)
 
         const getCountries = async () => {
             try {
-                let allCountries: CountryCard[] = await getAllCountries()                
-                countries.value = sortCountries(allCountries)
+                let countries = await getAllCountries()
+                allCountries.value = countries
             } catch (error) {
                 console.log(error)
             }
         }
 
         getCountries()
-
-        return { countries, continents, getCountries }
+        return { allCountries, continents, getCountries }
     }
 })
 </script>

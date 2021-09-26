@@ -9,12 +9,12 @@ import { CountryCard } from '../types/CountryCard'
 
 export function sortCountries (countries: CountryCard[]) {
     //Sorts countries alphabetically depending on name property
-    countries.sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
+    countries.sort((a, b) => a.name.common > b.name.common ? 1 : a.name.common < b.name.common ? -1 : 0)
     
     let sortedCountries = new Map()
 
     countries.forEach(country => {
-        let firstLetter = country.name[0].toUpperCase()
+        let firstLetter = country.name.common[0].toUpperCase()
 
         //Creates new key if it does not exist
         if(!sortedCountries.has(firstLetter)) {
