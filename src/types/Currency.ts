@@ -1,5 +1,6 @@
 export interface Currency {
-    code: String,
-    name: String,
-    symbol: String
+    [code: string]: {
+        name: string,
+        symbol: string
+    }
 }

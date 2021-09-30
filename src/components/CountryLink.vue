@@ -1,6 +1,6 @@
 <template>
-    <router-link :to="link" class="country-neighbour">
-        {{ countryName }}
+    <router-link v-if="country" :to="link" class="country-neighbour">
+        {{ country.flag }} {{ country.name.common }}
     </router-link>
 </template>
 
@@ -9,19 +9,21 @@ import { ref, defineComponent } from 'vue'
 
 import { getCountry } from '../services/CountriesService'
 
+import { Country } from '../types/Country'
+
 export default defineComponent({
     name: 'CountryLink',
     props: {
         countryCode: { type: String, required: true }
     },
     setup (props) {
-        const countryName = ref('Country')
+        const country = ref<null | Country>(null)
         const link = ref(`/country/${props.countryCode}`)
 
         const getCountryName = async () => {
             try {
-                let country = await getCountry(props.countryCode)
-                countryName.value = country.name.toString()
+                let response = await getCountry(props.countryCode)
+                country.value = response
             } catch (error) {
                 console.log(error)
             }
@@ -29,13 +31,14 @@ export default defineComponent({
 
         getCountryName()
 
-        return { countryName, link, getCountryName }
+        return { country, link, getCountryName }
     }
 })
 </script>
 
 <style lang="scss" scoped>
 .country-neighbour {
-    color: yellow;
+    text-align: center;
+    text-decoration: none;
 }
 </style>

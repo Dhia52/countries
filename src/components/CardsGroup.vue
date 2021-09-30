@@ -1,16 +1,14 @@
 <template>
-    <div class="cards-group">
-        <div class="cards">
-            <Card v-for="(countryCard, index) in countriesCards"
-                :key="index"
-                :country="countryCard"
-            />
-        </div>
-    </div>
+    <el-row class="cards-group" justify="center">
+        <Card v-for="countryCard in countriesCards"
+            :key="countryCard.cca3"
+            :country="countryCard"
+        />
+    </el-row>
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, PropType } from "vue"
+import { defineComponent, PropType } from "vue"
 
 import Card from "./Card.vue"
 
@@ -21,15 +19,6 @@ export default defineComponent ({
     components: { Card },
     props: {
         countriesCards: { type: Array as PropType<CountryCard[]>, required: true }
-    },
-    setup () {
-        let display = ref(false)
-
-        const toggleDisplay = () => {
-            display.value = !display.value
-        }
-
-        return { display, toggleDisplay }
     }
 })
 </script>
@@ -37,12 +26,6 @@ export default defineComponent ({
 <style lang="scss" scoped>
 .cards-group {
     margin: 0 10px;
-    > .cards {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: flex-start;
-        flex-wrap: wrap;
-    }
+    flex-wrap: wrap;
 }
 </style>

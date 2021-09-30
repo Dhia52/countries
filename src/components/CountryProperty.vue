@@ -1,10 +1,8 @@
 <template>
-    <el-col :xs="24" :sm="11" class="country-property">
-        <el-row align="middle">
-            <el-col :xs="12" :sm="24" class="name">{{ name }}</el-col>
-            <el-col :xs="12" :sm="24" class="contents"><slot></slot></el-col>
-        </el-row>
-    </el-col>
+    <el-row class="country-property" align="middle">
+        <el-col :xs="24" :span="12" class="name">{{ name }}</el-col>
+        <el-col :xs="24" :span="12" class="contents"><slot></slot></el-col>
+    </el-row>
 </template>
 
 <script lang="ts">
@@ -14,11 +12,6 @@ export default defineComponent({
     name: "CountryProperty",
     props: {
         name: { type: String, required: true }
-    },
-    setup () {
-        
-
-        return {}
     }
 })
 </script>

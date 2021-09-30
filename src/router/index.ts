@@ -1,6 +1,7 @@
 import * as VueRouter from 'vue-router'
 
 import Home from '../pages/Home.vue'
+import WorkInProgress from '../pages/WorkInProgress.vue'
 import Country from '../pages/Country.vue'
 import Region from '../pages/Region.vue'
 import NotFound from '../pages/NotFound.vue'
@@ -9,31 +10,37 @@ const router = VueRouter.createRouter({
     history: VueRouter.createWebHistory(),
     routes: [
         {
-            path: '/',
-            name: 'Home',
-            component: Home,
-            meta: { title: "Home" }
-        },
-        {
-            path: '/country/:countryCode',
-            name: 'Country',
-            component: Country,
-            props: true,
-            meta: { title: "Country" }
-        },
-        {
-            path: '/region/:regionCode',
-            name: 'Region',
-            component: Region,
-            props: true,
-            meta: { title: "Continent" }
-        },
-        {
             path: '/:path(.*)*',
-            name: 'NotFound',
-            component: NotFound,
-            meta: { title: "Not Found" }
-        }
+            name: 'WorkInProgress',
+            component: WorkInProgress,
+            meta: { title: "Coming Soon!" }
+        },
+        // {
+        //     path: '/',
+        //     name: 'Home',
+        //     component: WorkInProgress,
+        //     meta: { title: "Home" }
+        // },
+        // {
+        //     path: '/country/:countryCode',
+        //     name: 'Country',
+        //     component: Country,
+        //     props: true,
+        //     meta: { title: "Country" }
+        // },
+        // {
+        //     path: '/region/:regionName',
+        //     name: 'Region',
+        //     component: Region,
+        //     props: true,
+        //     meta: { title: "Continent" }
+        // },
+        // {
+        //     path: '/:path(.*)*',
+        //     name: 'NotFound',
+        //     component: NotFound,
+        //     meta: { title: "Not Found" }
+        // }
     ]
 })
 

@@ -1,20 +1,27 @@
 import { CountryCard } from './CountryCard'
-import { RegionalBloc } from './RegionalBloc'
 import { Currency } from './Currency'
 
 export interface Country extends CountryCard {
-    altSpellings: String[],
-    area: Number,
-    borders: String[],
-    capital: String,
+    altSpellings: string[],
+    area: number,
+    borders: string[],
+    capital: string[],
     currencies: Currency[],
-    demonym: String,
-    languages: {name: String}[],
-    latlng: Number[],
-    nativeName: String,
-    population: Number,
-    region: String,
-    regionalBlocs: RegionalBloc[],
-    subregion: String,
-    translations: Object
+    demonyms: {
+        [languageCode: string] : {
+            f: string,
+            m: string
+        }
+    },
+    flag: string,
+    languages: { [languageCode: string] : string },
+    latlng: number[],
+    region: string,
+    subregion: string,
+    translations: {
+        [languageCode: string]: {
+            official: string,
+            common: string
+        }
+    }
 }

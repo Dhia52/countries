@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container class="page-container">
     <el-header>
       <el-menu mode="horizontal">
         <el-menu-item>
@@ -33,8 +33,18 @@
         element-loading-background="#000000"
       ></router-view> -->
     </el-main>
-    <el-footer>©{{ currentYear }}</el-footer>
+    <el-footer height="auto">
+      <el-row justify="space-around">
+        <el-col :span="1"><router-link to="/region/africa">Africa</router-link></el-col>
+        <el-col :span="1"><router-link to="/region/americas">Americas</router-link></el-col>
+        <el-col :span="1"><router-link to="/region/asia">Asia</router-link></el-col>
+        <el-col :span="1"><router-link to="/region/europe">Europe</router-link></el-col>
+        <el-col :span="1"><router-link to="/region/oceania">Oceania</router-link></el-col>
+      </el-row>
+      <el-row>©{{ currentYear }}</el-row>
+    </el-footer>
   </el-container>
+  <el-backtop />
 </template>
 
 <script lang="ts">
@@ -58,7 +68,7 @@
 </script>
 
 <style lang="scss">
-.el-container {
+.page-container {
   min-height: 100vh;
 }
 </style>

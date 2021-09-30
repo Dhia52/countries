@@ -1,85 +1,133 @@
 <template>
-    <el-container v-if="countryInfo">
-        <el-header>
-            <el-row align="middle" justify="center">
-                <el-col :xs="24" :sm="12">
-                    <h1>{{ countryInfo.name }} <span v-if="showNativeName">- {{ countryInfo.nativeName }}</span></h1>
-                    <h4 v-if="countryInfo.altSpellings">{{ countryInfo.altSpellings.join(', ') }}</h4>
-                </el-col>
-                <el-col :xs="24" :sm="{span: 10, offset: 2}">
-                    <el-card :body-style="{ backgroundColor: '#1a1a1a' }">
-                        <el-image :alt="flagAlt" :src="countryInfo.flag" fit="contain">text</el-image>
-                    </el-card>
-                </el-col>
+    <el-row justify="space-between" align="middle">
+        <el-button>Hello</el-button>
+        <el-switch
+            v-model="official"
+            active-text="Official names"
+        ></el-switch>
+    </el-row>
+    <el-row v-if="countryInfo" justify="space-around" align="middle">
+        <el-col :xs="24" :sm="12" :md="10" class="country-flag-container">
+            <el-row id="country-name" justify="center" align="middle">
+                <h1 v-if="!official">{{ countryInfo.name.common }}</h1>
+                <h1 v-else>{{ countryInfo.name.official }}</h1>
+                <el-tooltip placement="top" content="United Nations member" v-if="countryInfo.unMember">
+                    <el-avatar
+                        alt="Logo of the United Nations"
+                        src="https://upload.wikimedia.org/wikipedia/commons/e/ee/UN_emblem_blue.svg"
+                        size="small"
+                        fit="scale-down"
+                    >
+                    </el-avatar>
+                </el-tooltip>
             </el-row>
-        </el-header>
-        <el-main>
-            <el-row justify="space-between">
-                <CountryProperty name="Capital city" v-if="countryInfo.capital">{{ countryInfo.capital }}</CountryProperty>
-                <CountryProperty name="Demonym" v-if="countryInfo.demonym">{{ countryInfo.demonym }}</CountryProperty>
-                <CountryProperty name="Languages">{{ spokenLanguages.join(', ') }}</CountryProperty>
-                <CountryProperty name="Region">
-                    <el-row>
-                        <el-col :sm="12"><router-link :to="regionLink" class="region-link">{{ countryInfo.region }}</router-link></el-col>
-                        <el-col :sm="12">{{ countryInfo.subregion }}</el-col>
-                    </el-row>
-                </CountryProperty>
-                <CountryProperty name="Position">
-                    <el-row align="middle">
-                        <el-col :xs="24" :sm="12">Latitude: {{ countryInfo.latlng[0] }}</el-col>
-                        <el-col :xs="24" :sm="12">Longitude: {{ countryInfo.latlng[1] }}</el-col>
-                    </el-row>
-                </CountryProperty>
-                <CountryProperty v-if="countryInfo.area" name="Area">{{ countryInfo.area }} km²</CountryProperty>
-                <CountryProperty name="Population">{{ countryInfo.population }}</CountryProperty>
-                <CountryProperty name="Currency">
-                    <el-row>
-                        <el-col v-for="(currency, index) in countryInfo.currencies" :key="index">
-                            {{ currency.code }} - {{ currency.name }} <span v-if="currency.symbol">({{ currency.symbol }})</span>
-                        </el-col>
-                    </el-row>
-                </CountryProperty>
-                <CountryProperty name="Country name in other languages">
-                    <el-row>
-                        <el-col v-for="(value, name, index) in countryInfo.translations" :key="index">
-                            {{ name }}: {{ value }}
-                        </el-col>
-                    </el-row>
-                </CountryProperty>
-                <CountryProperty name="This country is a member of the" v-if="countryInfo.regionalBlocs.length > 0">
+            <img class="country-flag" :src="countryInfo.flags.svg" :alt="flagAlt" />
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="10">
+            <CountryProperty name="Official Languages">
+                <el-row v-for="(language, code) in countryInfo.languages" :key="code">
+                    {{ language }}
+                </el-row>
+            </CountryProperty>
+            <CountryProperty name="Name in Native Language" v-if="countryInfo.name.nativeName">
                 <el-row>
-                    <el-col v-for="(bloc, index) in countryInfo.regionalBlocs" :key="index">
-                        {{ bloc.name }} - {{ bloc.acronym }}
+                    <el-col v-for="(names, lang) in countryInfo.name.nativeName" :key="lang" :span="24">
+                        <span v-if="Object.keys(countryInfo?.name.nativeName).length > 1">{{ convertCodeToLanguage(lang) }}: </span>
+                        <span v-if="!official">{{ names.common }}</span>
+                        <span v-else>{{ names.official }}</span>
                     </el-col>
                 </el-row>
-                </CountryProperty>
-                <CountryProperty name="Neighbouring Countries" v-if="hasNeighbours">
-                    <el-row>
-                        <el-col v-for="countryCode in countryInfo.borders" :key="countryCode">
-                            <CountryLink :countryCode="countryCode" />
-                        </el-col>
-                    </el-row>
-                </CountryProperty>
+            </CountryProperty>
+            <CountryProperty name="Currency" v-if="countryInfo.currencies">
+                <el-row v-for="(currency, code) in countryInfo.currencies" :key="code">
+                    {{ currency.name }} - {{ code }} ({{ currency.symbol }})
+                </el-row>
+            </CountryProperty>
+            <CountryProperty name="Capital City" v-if="countryInfo.capital">
+                {{ countryInfo.capital.join(', ') }}
+            </CountryProperty>
+            <CountryProperty name="Region">
+                {{ countryInfo.region }}
+            </CountryProperty>
+            <CountryProperty name="Subregion">
+                {{ countryInfo.subregion }}
+            </CountryProperty>
+            <CountryProperty name="Coordinates">
+                <el-row>
+                    <el-col :span="12">
+                        Latitude
+                    </el-col>
+                    <el-col :span="12">
+                        {{ countryInfo.latlng[0] }}°
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        Longitude
+                    </el-col>
+                    <el-col :span="12">
+                        {{ countryInfo.latlng[1] }}°
+                    </el-col>
+                </el-row>
+            </CountryProperty>
+            <CountryProperty name="Neighbouring Countries" v-if="countryInfo.borders">
+                <el-row v-for="code in countryInfo.borders" :key="code">
+                    <CountryLink :countryCode="code.toLowerCase()" />
+                </el-row>
+            </CountryProperty>
+            <CountryProperty name="Area">
+                {{ countryInfo.area }} km²
+            </CountryProperty>
+            <CountryProperty name="Demonym">
+                <span v-if="countryInfo.demonyms.eng.m === countryInfo.demonyms.eng.f">
+                    {{ countryInfo.demonyms.eng.m }}
+                </span>
+                <span v-else>{{ countryInfo.demonyms.eng.m }} - {{ countryInfo.demonyms.eng.f }}</span>
+            </CountryProperty>
+        </el-col>
+    </el-row>
+    <el-row><el-col :span="24">
+        <el-row><h2>Translations</h2></el-row>
+        <CountryProperty name="Country Name" v-if="countryInfo?.translations">
+            <el-row v-for="(translation, code) in countryInfo.translations" :key="code">
+                <el-col :span="12">
+                    {{ convertCodeToLanguage(code) }}
+                </el-col>
+                <el-col :span="12">
+                    <span v-if="official">{{ translation.official }}</span>
+                    <span v-else>{{ translation.common }}</span>
+                </el-col>
             </el-row>
-        </el-main>
-    </el-container>
+        </CountryProperty>
+        <CountryProperty name="Demonym" v-if="countryInfo?.demonyms">
+            <template v-for="(translation, lang) in countryInfo.demonyms" :key="lang">
+                <el-row v-if="lang !== 'eng'" >
+                    <el-col :span="12">
+                        {{ convertCodeToLanguage(lang) }}
+                    </el-col>
+                    <el-col :span="12">
+                        <span>{{ translation.m }}</span>
+                        <span v-if="translation.m !== translation.f">{{ translation.f }}</span>
+                    </el-col>
+                </el-row>
+            </template>
+        </CountryProperty>
+    </el-col></el-row>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
 
 import { useRouter, useRoute } from 'vue-router'
-import { useStore } from '../store/index'
 
 import CountryLink from '../components/CountryLink.vue'
 import CountryProperty from '../components/CountryProperty.vue'
 
-import { continentsArray } from '../data/Continents'
-
 import { getCountry } from '../services/CountriesService'
 
+import iso6393 from '@freearhey/iso-639-3'
+
 import { Country } from '../types/Country'
-import { CountryCard } from '../types/CountryCard'
 
 export default defineComponent({
     name: "Country",
@@ -90,16 +138,25 @@ export default defineComponent({
     setup(props) {
         const router = useRouter()
         const route = useRoute()
-        const store = useStore()
 
-        const countryInfo = ref<Country>()
+        const countryInfo = ref<null | Country>(null)
+        const official = ref<boolean>(false)
+
+        const flagAlt = computed(() => `Flag of ${countryInfo.value?.name.common}`)
+        const nativeNames = computed(() => {
+            if (typeof countryInfo.value?.name.nativeName === "object") {
+                if (Object.keys(countryInfo.value?.name.nativeName).length > 0) {
+                    return Object.keys(countryInfo.value?.name.nativeName)
+                }
+                return null
+            }
+        })
 
         const getCountryInfo = async (isoCode: string) => {
-            store.commit('TOGGLE_IS_LOADING')
             try {
                 let info = await getCountry(isoCode)
                 countryInfo.value = info
-                document.title= `${info.name.toString()} - ${import.meta.env.VITE_APP_TITLE}`
+                document.title= `${info.name.common.toString()} - ${import.meta.env.VITE_APP_TITLE}`
             } catch (error) {
                 console.log(error)
                 //Navigation guard
@@ -107,72 +164,13 @@ export default defineComponent({
                     name: 'NotFound',
                     params: { path: route.path.substring(1).split('/') }
                 })
-            } finally {
-                store.commit('TOGGLE_IS_LOADING')
             }
         }
 
-        const getNeighboursInfo = () => {
-            const neighbours: CountryCard[] = []
-            if(countryInfo.value?.borders) {
-                countryInfo.value.borders.forEach(async (isoCode) => {
-                    try {
-                        let country = await getCountry(isoCode.toString())
-                        neighbours.push({name: country.name, flag: country.flag, alpha3Code: country.alpha3Code})
-                    } catch(error) {
-                        console.log("Neighbour not found");
-                    }
-                });
-            }
-            return neighbours
-        }
+        const convertCodeToLanguage = (code: string) => iso6393.find(lang => lang.code === code )?.name
 
-        getCountryInfo(props.countryCode.toLowerCase())
-
-        const showNativeName = computed(() => {
-            if(countryInfo.value && "name" in countryInfo.value && "nativeName" in countryInfo.value) {
-                return countryInfo.value.name !== countryInfo.value.nativeName
-            }
-            return false
-        })
-
-        const flagAlt = computed(() => {
-            let alt = ''
-            if(countryInfo.value && "name" in countryInfo.value) {
-                alt = `Flag of ${countryInfo.value.name}`
-            }
-            return alt
-        })
-
-        const regionLink = computed(() => {
-            if(countryInfo.value && "region" in countryInfo.value) {
-                let region: String = countryInfo.value.region
-                let continent = continentsArray.find(element => element.name === region)
-                if (continent) {
-                    return `/region/${continent.code}`
-                }
-                return '/'
-            }
-        })
-
-        const hasNeighbours = computed(() => {
-            if(countryInfo.value && "borders" in countryInfo.value) {
-                if(countryInfo.value.borders.length > 0) {
-                    return true
-                }
-            }
-            return false
-        })
-
-        const neighbours = computed(() => getNeighboursInfo())
-            
-        const spokenLanguages = computed(() => {
-            let languages: String[] = []
-            if(countryInfo.value && "languages" in countryInfo.value) {
-                countryInfo.value.languages.forEach(language => languages.push(language.name))
-            }
-            return languages
-        })
+        convertCodeToLanguage('eng')
+        getCountryInfo(props.countryCode)
 
         //Watcher for refreshing country info after clicking a link
         watch(
@@ -182,14 +180,11 @@ export default defineComponent({
 
         return {
             countryInfo,
-            getCountryInfo,
-            getNeighboursInfo,
-            neighbours,
-            showNativeName,
             flagAlt,
-            regionLink,
-            hasNeighbours,
-            spokenLanguages
+            nativeNames,
+            official,
+            getCountryInfo,
+            convertCodeToLanguage
         }
     }
     
@@ -197,12 +192,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.el-header {
-    height: auto;
-    text-align: center;
-}
-
-.region-link {
-    color: yellow;
+.country-flag {
+    max-width: 100%;
+    max-height: 50vh
 }
 </style>

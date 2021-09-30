@@ -1,29 +1,34 @@
 <template>
+    <el-row justify="space-around" align="center">
+        <el-col :xs="0" :sm="10" id="app-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/The_world_flag_2006.svg" alt="App favicon" />
+        </el-col>
+        <el-col :xs="24" :sm="10" id="app-presentation">
+            <h1>Welcome to {{ appTitle }}!</h1>
+            <p>The web application that quenches your thirst of knowledge about countries of the world!</p>
+        </el-col>
+    </el-row>
+    <CountriesList v-if="allCountries" :countries="allCountries" />
+    <el-divider></el-divider>
     <RandomCountries v-if="allCountries" :countries="allCountries" />
-    <!-- <CountriesList :countries="countries" /> -->
 </template>
 
 <script lang="ts">
 import { ref, defineComponent } from "vue"
 
-import CardsGroup from "../components/CardsGroup.vue"
 import RandomCountries from "../components/RandomCountries.vue"
 import CountriesList from "../components/CountriesList.vue"
 
 import { getAllCountries } from "../services/CountriesService"
 
-import { sortCountries } from '../functions/SortCountries'
-
 import { CountryCard } from '../types/CountryCard'
-
-import { continentsArray } from '../data/Continents'
 
 export default defineComponent ({
     name: "Home",
-    components: { CardsGroup, RandomCountries, CountriesList },
+    components: { RandomCountries, CountriesList },
     setup() {
-        const continents = ref(continentsArray)
         const allCountries = ref<null | CountryCard[]>(null)
+        const appTitle = ref(import.meta.env.VITE_APP_TITLE)
 
         const getCountries = async () => {
             try {
@@ -35,11 +40,28 @@ export default defineComponent ({
         }
 
         getCountries()
-        return { allCountries, continents, getCountries }
+        return { allCountries, appTitle, getCountries }
     }
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+#app-presentation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
+    >* {
+        text-align: center;
+    }
+
+    >p {
+        font-size: 1.3em;
+    }
+}
+img {
+    width: 100%;
+    object-fit: contain;
+}
 </style>
