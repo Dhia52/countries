@@ -1,15 +1,8 @@
 <template>
-    <el-row justify="space-around" align="center">
-        <el-col :xs="0" :sm="10" id="app-logo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/The_world_flag_2006.svg" alt="App favicon" />
-        </el-col>
-        <el-col :xs="24" :sm="10" id="app-presentation">
-            <h1>Welcome to {{ appTitle }}!</h1>
-            <p>The web application that quenches your thirst of knowledge about countries of the world!</p>
-        </el-col>
-    </el-row>
+    <h1>Welcome to {{ appTitle }}!</h1>
+    <p>The web application that quenches your thirst of knowledge about countries of the world!</p>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/The_world_flag_2006.svg" alt="App favicon" />
     <CountriesList v-if="allCountries" :countries="allCountries" />
-    <el-divider></el-divider>
     <RandomCountries v-if="allCountries" :countries="allCountries" />
 </template>
 
@@ -46,22 +39,19 @@ export default defineComponent ({
 </script>
 
 <style lang="scss" scoped>
-#app-presentation {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    >* {
-        text-align: center;
-    }
-
-    >p {
-        font-size: 1.3em;
-    }
+h1 {
+    grid-column: 1 / span 12;
+    place-self: center;
+    text-align: center;
 }
-img {
+p {
+    grid-column: 1 / span 12;
+    place-self: center;
+    text-align: center;
+}
+img{
     width: 100%;
-    object-fit: contain;
+    grid-column: 1 / span 12;
+    place-self: center;
 }
 </style>

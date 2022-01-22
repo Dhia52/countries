@@ -1,10 +1,8 @@
 <template>
-    <el-row class="cards-group" justify="center">
-        <Card v-for="countryCard in countriesCards"
-            :key="countryCard.cca3"
-            :country="countryCard"
-        />
-    </el-row>
+    <Card v-for="countryCard in countriesCards"
+        :key="countryCard.cca3"
+        :country="countryCard"
+    />
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-    <el-row justify="space-between" align="middle">
+    <!-- <el-row justify="space-between" align="middle">
         <el-button>Hello</el-button>
         <el-switch
             v-model="official"
@@ -112,7 +112,7 @@
                 </el-row>
             </template>
         </CountryProperty>
-    </el-col></el-row>
+    </el-col></el-row> -->
 </template>
 
 <script lang="ts">
@@ -125,7 +125,7 @@ import CountryProperty from '../components/CountryProperty.vue'
 
 import { getCountry } from '../services/CountriesService'
 
-import iso6393 from '@freearhey/iso-639-3'
+// import iso6393 from '@freearhey/iso-639-3'
 
 import { Country } from '../types/Country'
 

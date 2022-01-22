@@ -1,7 +1,12 @@
 <template>
-    <el-container>
+    <div class="countries-list">
+        <h2>Search by country name</h2>
+        <button type="text" v-for="([letter]) in sortedCountries" :key="letter" @click="selectGroup(letter)">
+            {{ letter }}
+        </button>
+    </div>
+    <!-- <el-container>
         <el-header height="auto">
-            <h2>Search by country name</h2>
         </el-header>
         <el-main>
             <el-row justify="center">
@@ -12,7 +17,7 @@
             <CardsGroup v-if="selectedGroup" :countriesCards="selectedGroup" />
             <el-row v-else class="click-prompt" justify="center" align="middle">Please, click on a letter above.</el-row>
         </el-main>
-    </el-container>
+    </el-container> -->
 </template>
 
 <script lang="ts">

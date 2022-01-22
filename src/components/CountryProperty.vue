@@ -1,8 +1,6 @@
 <template>
-    <el-row class="country-property" align="middle">
-        <el-col :xs="24" :span="12" class="name">{{ name }}</el-col>
-        <el-col :xs="24" :span="12" class="contents"><slot></slot></el-col>
-    </el-row>
+    <div class="name">{{ name }}</div>
+    <div class="contents"><slot></slot></div>
 </template>
 
 <script lang="ts">

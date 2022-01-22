@@ -1,15 +1,8 @@
 <template>
-    <el-row justify="space-around" align="center" v-if="regionCountries">
-        <el-col :xs="0" :sm="10">
-            <img src="" alt="" />
-        </el-col>
-        <el-col :xs="24" :sm="10">
-            <h1>{{ regionName }}</h1>
-            <p>There are {{ regionCountries.length }} countries in this region.</p>
-        </el-col>
-    </el-row>
+    <img src="" alt="" />
+    <h1>{{ regionName }}</h1>
+    <p>There are {{ regionCountries?.length }} countries in this region.</p>
     <CountriesList v-if="regionCountries" :countries="regionCountries" />
-    <el-divider></el-divider>
     <RandomCountries v-if="regionCountries" :countries="regionCountries" />
 </template>
 

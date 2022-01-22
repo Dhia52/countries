@@ -1,12 +1,12 @@
 <template>
-    <el-container>
+    <!-- <el-container>
         <el-header>
             <h2>Random countries <span v-if="region">from {{ region }}</span></h2>
         </el-header>
         <el-main>
             <CardsGroup :countriesCards="randomCountries"/>
         </el-main>
-    </el-container>
+    </el-container> -->
 </template>
 
 <script lang="ts">
