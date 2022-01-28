@@ -54,4 +54,7 @@ img{
     grid-column: 1 / span 12;
     place-self: center;
 }
+.countries-list, .random-countries {
+    grid-column: 1 / span 12;
+}
 </style>

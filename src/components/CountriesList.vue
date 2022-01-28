@@ -1,23 +1,14 @@
 <template>
-    <div class="countries-list">
+    <div class="countries-list grid-container">
         <h2>Search by country name</h2>
-        <button type="text" v-for="([letter]) in sortedCountries" :key="letter" @click="selectGroup(letter)">
-            {{ letter }}
-        </button>
+        <div class="alphabet">
+            <span class="letter" v-for="([letter]) in sortedCountries" :key="letter" @click="selectGroup(letter)">
+                {{ letter }}
+            </span>
+        </div>
+        <CardsGroup v-if="selectedGroup" :countriesCards="selectedGroup" />
+        <div v-else class="click-prompt">Please, select a letter above.</div>
     </div>
-    <!-- <el-container>
-        <el-header height="auto">
-        </el-header>
-        <el-main>
-            <el-row justify="center">
-                <el-button type="text" v-for="([letter]) in sortedCountries" :key="letter" @click="selectGroup(letter)">
-                    {{ letter }}
-                </el-button>
-            </el-row>
-            <CardsGroup v-if="selectedGroup" :countriesCards="selectedGroup" />
-            <el-row v-else class="click-prompt" justify="center" align="middle">Please, click on a letter above.</el-row>
-        </el-main>
-    </el-container> -->
 </template>
 
 <script lang="ts">
@@ -50,9 +41,29 @@ export default defineComponent({
 <style lang="scss" scoped>
 h2 {
     text-align: center;
+    grid-column: 1 / span 12;
+}
+
+.alphabet {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    grid-column: 1 / span 12;
+    margin-bottom: 20px;
+
+    > .letter {
+        padding: 0 10px;
+        font-weight: bold;
+        font-size: 14pt;
+        cursor: pointer;
+    }
 }
 
 .click-prompt {
+    grid-column: 1 / span 12;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 200px;
     text-align: center;
     font-weight: 600;

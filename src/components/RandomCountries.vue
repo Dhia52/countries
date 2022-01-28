@@ -1,12 +1,8 @@
 <template>
-    <!-- <el-container>
-        <el-header>
-            <h2>Random countries <span v-if="region">from {{ region }}</span></h2>
-        </el-header>
-        <el-main>
-            <CardsGroup :countriesCards="randomCountries"/>
-        </el-main>
-    </el-container> -->
+    <div class="random-countries grid-container">
+        <h2>Random countries <span v-if="region">from {{ region }}</span></h2>
+        <CardsGroup :countriesCards="randomCountries"/>
+    </div>
 </template>
 
 <script lang="ts">
@@ -44,6 +40,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 h2 {
+    grid-column: 1 / span 12;
     text-align: center;
 }
 </style>

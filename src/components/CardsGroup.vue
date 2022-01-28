@@ -1,8 +1,10 @@
 <template>
-    <Card v-for="countryCard in countriesCards"
-        :key="countryCard.cca3"
-        :country="countryCard"
-    />
+    <div class="cards-group">
+        <Card v-for="countryCard in countriesCards"
+            :key="countryCard.cca3"
+            :country="countryCard"
+        />
+    </div>
 </template>
 
 <script lang="ts">
@@ -24,6 +26,9 @@ export default defineComponent ({
 <style lang="scss" scoped>
 .cards-group {
     margin: 0 10px;
-    flex-wrap: wrap;
+    grid-column: 1 / span 12;
+    display: grid;
+    grid-auto-flow: column;
+    overflow-x: scroll;
 }
 </style>

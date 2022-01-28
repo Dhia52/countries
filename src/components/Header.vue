@@ -40,6 +40,8 @@ header {
     align-items: center;
     background-color: #42b883;
     grid-column: 1 / span 12;
+    position: sticky;
+    top: 0;
     
     >.router-link {
         display: flex;

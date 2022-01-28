@@ -41,6 +41,10 @@ body {
       display: grid;
       box-sizing: border-box;
       grid-template-rows: 70px auto 70px;
+
+      * {
+        box-sizing: border-box;
+      }
       
       > * {
         padding: 8px;
