@@ -1,6 +1,6 @@
 <template>
+    <h1>{{ regionName.substring(0, 1).toUpperCase() + regionName.substring(1) }}</h1>
     <img src="" alt="" />
-    <h1>{{ regionName }}</h1>
     <p>There are {{ regionCountries?.length }} countries in this region.</p>
     <CountriesList v-if="regionCountries" :countries="regionCountries" />
     <RandomCountries v-if="regionCountries" :countries="regionCountries" />
@@ -81,5 +81,21 @@ export default defineComponent({
 </script>
 
 <style scoped>
+h1 {
+    grid-column: 1 / span 12;
+    text-align: center;
+}
 
+img {
+    grid-column: 1 / span 12;
+}
+
+p {
+    grid-column: 1 / span 12;
+    text-align: center;
+}
+
+.countries-list, .random-countries {
+    grid-column: 1 / span 12;
+}
 </style>
