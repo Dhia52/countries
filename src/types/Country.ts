@@ -6,6 +6,10 @@ export interface Country extends CountryCard {
     area: number,
     borders: string[],
     capital: string[],
+    coatOfArms?: {
+        png: string,
+        svg: string
+    }
     currencies: Currency[],
     demonyms: {
         [languageCode: string] : {
@@ -16,6 +20,16 @@ export interface Country extends CountryCard {
     flag: string,
     languages: { [languageCode: string] : string },
     latlng: number[],
+    name: {
+        common: string,
+        official: string,
+        nativeName: {
+            [languageCode: string]: {
+                official: string,
+                common: string
+            }
+        }
+    },
     region: string,
     subregion: string,
     translations: {
@@ -23,5 +37,6 @@ export interface Country extends CountryCard {
             official: string,
             common: string
         }
-    }
+    },
+    unMember: boolean
 }

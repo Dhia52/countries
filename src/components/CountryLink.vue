@@ -38,7 +38,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .country-neighbour {
-    text-align: center;
     text-decoration: none;
+    color: inherit;
+    &:hover {
+        text-decoration: underline;
+    }
 }
 </style>

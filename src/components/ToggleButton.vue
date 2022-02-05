@@ -1,7 +1,7 @@
 <template>
     <div class="switch" :class="onOffClass" @click="toggle">
-        <span><slot name="on-icon"></slot></span>
-        <span><slot name="off-icon"></slot></span>
+        <span><slot name="on-icon">On</slot></span>
+        <span><slot name="off-icon">Off</slot></span>
         <div class="slider"></div>
     </div>
 </template>

@@ -95,7 +95,11 @@ p {
     text-align: center;
 }
 
-.countries-list, .random-countries {
+.countries-list {
+    grid-column: 1 / span 12;
+}
+
+.random-countries {
     grid-column: 1 / span 12;
 }
 </style>

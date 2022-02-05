@@ -42,6 +42,7 @@ header {
     grid-column: 1 / span 12;
     position: sticky;
     top: 0;
+    z-index: 10;
     
     >.router-link {
         display: flex;
