@@ -51,7 +51,7 @@ body {
       }
 
       > #page-content {
-        grid-column: 1 / span 12;
+        grid-column: 1 / span $grid-columns;
       }
 
 
